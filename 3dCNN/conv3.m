@@ -1,6 +1,6 @@
 % conv3:    三维卷积，特别用于3dCNN中
-%       mat:        3D大矩阵
-%       filter:     3D卷积核，还有个数维度
+%       mat:        3D大矩阵   (h, w, f)
+%       filter:     3D卷积核，还有个数维度    (h, w, f, fm)
 %       strides:    3D步长
 %       padding:    same、vaild
 function [ res ] = conv3(mat, filter, strides, padding)
@@ -10,14 +10,14 @@ function [ res ] = conv3(mat, filter, strides, padding)
     end
 
     % 如果参数是same，则在三个维度都对mat进行扩充
-    [mf, mh, mw] = size(mat);
+    [mh, mw, mf] = size(mat);
     if (strcmp(padding, 'same'))
-        tmp = zeros(mf+2, mh+2, mw+2);
-        tmp(2:mf+1, 2:mh+1, 2:mw+1) = mat;
+        tmp = zeros(mh+2, mw+2, mf+2);
+        tmp(2:mh+1, 2:mw+1, 2:mf+1) = mat;
         mat = tmp;
     end
 
-    [mf, mh, mw] = size(mat);
+    [mh, mw, mf] = size(mat);
     [fm, ff, fh, fw] = size(filter);
     s1 = strides(1); s2 = strides(2); s3 = strides(3);
     

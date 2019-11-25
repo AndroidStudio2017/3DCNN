@@ -1,9 +1,9 @@
 classdef BasicConv3d
     properties
         type                % 类型
-        input               % 输入维度  (f, h, w)
-        output              % 输出维度  (f, h, w)
-        filter              % 卷积核    (fm, fn, fh, fw)
+        input               % 输入维度  (h, w, f)
+        output              % 输出维度  (h, w, f)
+        filter              % 卷积核    (fh, fw, fn, fm)
         strides             % 步长
     end
     methods
