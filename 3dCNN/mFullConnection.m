@@ -1,6 +1,7 @@
-function [ layer ] = mFullConnection(input, arguments)
+function [ layer ] = mFullConnection(input, arguments, bias)
     layer = BasicFullConnection;
-    layer.input = zeros(input(1), input(2), input(3));
+    layer.input = input;
     layer.arguments = arguments;
     layer.type = 'FullConnection';
+    layer.bias = bias;
 end

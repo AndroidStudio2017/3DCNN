@@ -1,7 +1,8 @@
-classdef BasicSoftMax
+% ReLU激活函数层
+classdef BasicReLU
     properties
         type            % 层类型
-        input           % 输入
+        input           % 输入维度
     end
     methods
         function r = forward(obj, input)
@@ -10,10 +11,8 @@ classdef BasicSoftMax
                 error('[ERROR] Vector Dimension ERROR! %s\n', obj.type);
             end
             
-            allSum = sum(input(:));
-            r = input / allSum;
+            r = input .* (input > 0);
         end
-        
         function r = backward(obj, dj)
             
         end

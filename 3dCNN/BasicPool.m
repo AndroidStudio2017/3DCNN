@@ -12,7 +12,7 @@ classdef BasicPool
                 error('[ERROR] Matrix Dimension ERROR! %s\n', obj.type);
             end
             
-            
+            r = mPooling(input, obj.ksize, obj.strides, obj.type);
         end
         function r = backward(obj, dj)
             

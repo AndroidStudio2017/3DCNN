@@ -10,7 +10,7 @@ videoFile = '../../video/test.mp4';            % 视频文件名
 videoRaw = VideoReader(videoFile);
 
 % nFrames = videoRaw.NumberOfFrames;
-nFrames = 10;       % 太大电脑算不过来
+nFrames = 4;       % 太大电脑算不过来
 height = videoRaw.Height;
 width = videoRaw.Width;
 
@@ -36,11 +36,11 @@ inputArray = uint8(cat(3, img_R, img_G, img_B));
 %% 构建 net
 % 卷积层
 % 卷积核随机初始化
-fm = 32;                                    % 卷积核个数
-fSize = [5, 5, 5];                          % 卷积核大小 (fh, fw, fn, fm)
+fm = 2;                                    % 卷积核个数
+fSize = [5, 5, 3];                          % 卷积核大小 (fh, fw, fn, fm)
 
 input = [height, width, nFrames];
-filter = rand(fSize(1), fSize(2), fSize(3), fm);
+filter = zeros(fSize(1), fSize(2), fSize(3), fm);
 strides = [1, 1, 1];
 conv1 = mConv3d(input, filter, strides);  
 
@@ -55,33 +55,27 @@ max_pool = mPool(input, ksize, strides, 'max_pool');
 % 全连接层  ** 连接池化层和全连接层的地方，其实本质还是一个卷积层
 input(1) = floor((input(1) - ksize(1))/strides(1)) + 1;
 input(2) = floor((input(2) - ksize(2))/strides(2)) + 1;
-filter = rand(input(1), input(2), 1, 1);
+filter = rand(int8(input(2)), int8(input(3)), 1, 1);
 strides = [1, 1, 1];
 full_connection1 = mConv3d(input, filter, strides);
 
 % 全连接层
 input(1) = 1;
 input(2) = 1;
-arguments = rand(300, input(3));
-bias = ones(300, 1);                % 偏置的维度应该是和输出的维度相同
-                                    % 印象中是的...
-full_connection2 = mFullConnection(input, arguments, bias);
-
-% ReLU
-input = [300, 1];
-relu = mReLU(input);
+arguments = rand(input(3), 300);
+full_connection2 = mFullConnection(input, arguments);
 
 % softmax
-input = [300, 1];
+input = [1, 1, 300];
 softmax = mSoftMax(input);  
 
 % net
-net = struct('conv1', conv1,                                            ...
-            'max_pool', max_pool,                                       ...
-             'full_connection1', full_connection1,                      ...
-             'full_connection2', full_connection2,                      ...
-             'relu', relu,                                              ...
-             'softmax', softmax);
+net = struct('conv1', conv1);                                            %...
+%            'max_pool', max_pool);                                      ...
+%             'full_connection1', full_connection1,                       ...
+%             'full_connection2', full_connection2,                       ...
+%             'softmax', softmax);
+
 
 % Try Forward
 estiRes = mForward(net, inputArray);

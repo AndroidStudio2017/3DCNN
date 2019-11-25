@@ -7,9 +7,9 @@ function [ result ] = mPooling(mat, ksize, strides, type)
     [mh, mw, mf] = size(mat);
     
     % 为结果提前分配空间
-    rf = mf
-    rh = floor((mh - ksize(1))/strides(1)) + 1
-    rw = floor((mw - ksize(2))/strides(2)) + 1
+    rf = mf;
+    rh = floor((mh - ksize(1))/strides(1)) + 1;
+    rw = floor((mw - ksize(2))/strides(2)) + 1;
     result = zeros(rh, rw, rf);
     
     for i = 1:rf

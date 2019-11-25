@@ -15,6 +15,8 @@ classdef BasicConv3d
             end
             
             % ½øÐÐ¾í»ý
+            size(input)
+            size(obj.filter)
             r = conv3(input, obj.filter, obj.strides, 'valid');
         end
         function r = backward(obj, dj)
