@@ -13,6 +13,7 @@ function [ result ] = mForward( net, input)
         key = k{1};
         module = net.(key);
         
+        % Debug
         size(res_trans)
         res_trans = module.forward(res_trans);
     end

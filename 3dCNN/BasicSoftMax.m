@@ -2,6 +2,7 @@ classdef BasicSoftMax
     properties
         type            % 层类型
         input           % 输入
+        res             % 该层的计算结果，用于BP
     end
     methods
         function r = forward(obj, input)
@@ -10,12 +11,16 @@ classdef BasicSoftMax
                 error('[ERROR] Vector Dimension ERROR! %s\n', obj.type);
             end
             
+            M = max(input(:));
+            input = exp(input - M);
             allSum = sum(input(:));
-            r = input / allSum;
+            obj.res = input / allSum;
+            r = obj.res;
         end
         
-        function r = backward(obj, dj)
-            
+        function r = backward(obj, y)
+            % y为该视频的真实标签
+            r = obj.res - y;
         end
     end
 end

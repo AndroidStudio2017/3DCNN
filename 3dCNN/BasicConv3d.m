@@ -5,6 +5,7 @@ classdef BasicConv3d
         output              % 输出维度  (h, w, f)
         filter              % 卷积核    (fh, fw, fn, fm)
         strides             % 步长
+        inputData           % 输入数据，用于BP
     end
     methods
         % 3dCNN的前馈算法
@@ -15,12 +16,14 @@ classdef BasicConv3d
             end
             
             % 进行卷积
-            size(input)
-            size(obj.filter)
+            % size(input)
+            % size(obj.filter)
+            obj.inputData = input;
             r = conv3(input, obj.filter, obj.strides, 'valid');
         end
         function r = backward(obj, dj)
             % 暂时未实现
+            
         end
     end
 end
