@@ -29,6 +29,7 @@ close all
 % end
 
 %% test for 
-for i = 0:2
+for i = 3:-1:1
     disp(i);
 end
+disp('ff');

@@ -35,7 +35,7 @@ classdef BasicFullConnection < handle
             gradientTheata = dj * obj.inputData';
             obj.arguments = obj.arguments - obj.learning_rate * gradientTheata;
             gradientBias = dj;
-            obj.bias = obj.arguments - obj.learning_rate * gradientBias;
+            obj.bias = obj.bias - obj.learning_rate * gradientBias;
         end
     end
 end

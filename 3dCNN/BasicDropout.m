@@ -1,4 +1,4 @@
-classdef BasicDropout
+classdef BasicDropout < handle
     properties
         type            % 层类型
         input           % 输入维度

@@ -2,15 +2,16 @@ clc
 clear
 close all
 addpath(genpath('../3dCNN'))                % 加入库文件搜索路径
+addpath(genpath('../utils'))
 
 %% 定义一些可调整的参数
-videoFile = '../../video/test.mp4';            % 视频文件名
+videoFile = '../../video/trial_truth_001.mp4';            % 视频文件名
 
 %% 读入video,以及相应参数
 videoRaw = VideoReader(videoFile);
 
 % nFrames = videoRaw.NumberOfFrames;
-nFrames = 10;       % 太大电脑算不过来
+nFrames = 10;
 height = videoRaw.Height;
 width = videoRaw.Width;
 
@@ -36,7 +37,7 @@ inputArray = uint8(cat(3, img_R, img_G, img_B));
 %% 构建 net
 % 卷积层
 % 卷积核随机初始化
-fm = 32;                                    % 卷积核个数
+fm = 8;                                    % 卷积核个数
 fSize = [5, 5, 5];                          % 卷积核大小 (fh, fw, fn, fm)
 
 input = [height, width, nFrames];

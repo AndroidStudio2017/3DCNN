@@ -1,9 +1,9 @@
 % ReLU激活函数层
-classdef BasicReLU
+classdef BasicReLU < handle
     properties
         type            % 层类型
         input           % 输入维度
-        inputDate       % 输入矩阵，用于BP
+        inputData       % 输入矩阵，用于BP
     end
     methods
         function r = forward(obj, input)
@@ -12,6 +12,7 @@ classdef BasicReLU
                 error('[ERROR] Vector Dimension ERROR! %s\n', obj.type);
             end
             
+            obj.inputData = input;
             r = input .* (input > 0);
         end
         function r = backward(obj, dj)

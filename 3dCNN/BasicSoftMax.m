@@ -1,4 +1,4 @@
-classdef BasicSoftMax
+classdef BasicSoftMax < handle
     properties
         type            % ²ãÀàÐÍ
         input           % ÊäÈë
