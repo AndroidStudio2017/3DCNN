@@ -1,13 +1,13 @@
 classdef BasicConv3d < handle
     properties
-        type                % 类型
-        input               % 输入维度  (h, w, f)
-        filter              % 卷积核    (fh, fw, fn, fm)
-        strides             % 步长
-        inputData           % 输入数据，用于BP
+        type            % 层类型
+        input           % 输入维度 (mh, mw, mf)
+        filter          % 卷积核 (mh, mw, 1)
+        strides         % 一般[1, 1, 1]
+        inputData       % 输入数据，用于BP
+        learning_rate   % 学习率，用于BP
     end
     methods
-        % 3dCNN的前馈算法
         function r = forward(obj, input)
             % 检测输入矩阵和一开始计算的维度是否相等，一个简单的错误检测机制
             if obj.input ~= size(input)
@@ -15,9 +15,9 @@ classdef BasicConv3d < handle
             end
             
             % 进行卷积
-            % size(input)
-            % size(obj.filter)
+            % 保存输入数据，用于BP时的反卷积
             obj.inputData = input;
+            % 直接卷积，不像之前的一样分通道
             r = conv3(input, obj.filter, obj.strides, 'valid');
         end
         function r = backward(obj, dj)
@@ -26,8 +26,11 @@ classdef BasicConv3d < handle
                 dj = reshape(dj, 1, 1, tf);
             end
             % 根据卷积步长填充零
+            % 如果步长为[1, 1, 1]，则直接返回dj
+            % 测试时先使strides为[1, 1, 1]
             dj_fill = mFillZero(dj, obj.strides);
             
+            % 详情见3D卷积公式
             % 将dj按照反卷积公式扩展零
             [dh, dw, df] = size(dj_fill);
             [fh, fw, ff] = size(obj.filter);
@@ -41,8 +44,8 @@ classdef BasicConv3d < handle
             filter_reverse = mReverse3d(obj.filter);
             
             % 更新卷积核
-            obj.filter = conv3(obj.inputData, dj_fill, [1, 1, 1], 'valid');
-            size(obj.filter)
+            dFilter = conv3(obj.inputData, dj_fill, [1, 1, 1], 'valid');
+            obj.filter = obj.filter - obj.learning_rate * dFilter;
             
             % 反卷积得到结果，调用conv3
             r = conv3(dj_extend, filter_reverse, [1, 1, 1], 'valid');

@@ -23,6 +23,8 @@ classdef BasicFullConnection < handle
                 % 全连接前馈就是直接矩阵乘法a = θx
                 r = obj.arguments * input + obj.bias;
             elseif ndims(input) == 2
+                % 如果已经是向量
+                % 直接记录输入数据，并前馈运算
                 obj.inputData = input;
                 r = obj.arguments * input + obj.bias;
             else

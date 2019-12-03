@@ -13,9 +13,15 @@ classdef BasicReLU < handle
             end
             
             obj.inputData = input;
+            % ReLU函数
+            % ReLU(x)
+            % 当x>0时，ReLU(x) = x
+            % 当x<=0时，ReLU(x) = 0
             r = input .* (input > 0);
         end
         function r = backward(obj, dj)
+            % ReLU函数的反向传播
+            % 因为置零的那些值对误差没有贡献，所以仅仅保留那些未置零的
             r = dj .* (obj.inputData > 0);
         end
     end
