@@ -9,10 +9,8 @@ classdef BasicConv3d < handle
     end
     methods
         function r = forward(obj, input)
-            % 检测输入矩阵和一开始计算的维度是否相等，一个简单的错误检测机制
-            if obj.input ~= size(input)
-                error('[ERROR] Matrix Dimension ERROR! %s\n', obj.type);
-            end
+            % 保存输入维度
+            obj.input = size(input);
             
             % 进行卷积
             % 保存输入数据，用于BP时的反卷积

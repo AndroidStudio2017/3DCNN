@@ -1,9 +1,7 @@
 % mDropout:     Dropout≤„ 
-%           input:           ‰»ÎŒ¨∂»
 %           p:              Dropout∏≈¬ 
-function [ layer ] = mDropout(input, p)
+function [ layer ] = mDropout(p)
     layer = BasicDropout;
-    layer.input = input;
     layer.p = p;
     layer.type = 'Dropout';
 end

@@ -8,6 +8,9 @@ classdef BasicPool < handle
     end
     methods
         function r = forward(obj, input)
+            % 记录input size
+            obj.input = size(input);
+            
             % 池化，调用mPooling函数
             % mPooling函数的输入是三个参数：
             %   input       待池化矩阵

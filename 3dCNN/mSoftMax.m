@@ -1,5 +1,4 @@
-function [ layer ] = mSoftMax(input)
+function [ layer ] = mSoftMax()
     layer = BasicSoftMax;
-    layer.input = input;
     layer.type = 'SoftMax';
 end

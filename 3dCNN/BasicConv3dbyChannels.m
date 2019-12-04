@@ -1,7 +1,6 @@
 classdef BasicConv3dbyChannels < handle
     properties
         type                % 类型
-        input               % 输入维度  (h, w, f)
         filter              % 卷积核    (fh, fw, fn, fm)
         strides             % 步长
         inputData           % 输入数据，用于BP
