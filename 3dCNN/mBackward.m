@@ -12,7 +12,7 @@ function [ result ] = mBackward(net, real_label)
         
         % Debug
         % module.type
-        size(err_trans)
+        % size(err_trans)
         err_trans = module.backward(err_trans);
     end
     

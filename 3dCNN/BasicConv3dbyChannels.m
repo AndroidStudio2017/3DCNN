@@ -44,12 +44,14 @@ classdef BasicConv3dbyChannels < handle
             for i=1:fm
                 for j=0:2
                     range_in = [j*(in/3) + 1, (j+1)*(in/3)];
-                    range_dj = [((i-1)*3+j)*(tf/24) + 1, ((i-1)*3+j+1)*(tf/24)];
+                    range_dj = [((i-1)*3+j)*(tf/(3*fm)) + 1, ((i-1)*3+j+1)*(tf/(3*fm))];
                     dFilter(:, :, :, i) = dFilter(:, :, :, i) + ...
                         conv3(obj.inputData(:, :, range_in(1):range_in(2)), ...
                         dj(:, :, range_dj(1):range_dj(2)), [1, 1, 1], 'valid');
                 end
             end
+            
+            segment = tf/(3*fm);
             
             % 分通道传递dj
             % 思路如下：
@@ -61,11 +63,11 @@ classdef BasicConv3dbyChannels < handle
             % ---- R通道 ----
             % 根据卷积步长填充零
             error_R = zeros(ih, iw, in/3);
-            for i=1:18:tf
+            for i=1:(segment*3):tf
                 % 如果strides=[1, 1, 1]，则直接返回参数一的矩阵
                 % 如果strides~=[1, 1, 1]，那么填充一定的0之后返回
                 % 测试阶段strides=[1, 1, 1]
-                dj_fill = mFillZero(dj(:, :, i:i+5), obj.strides);
+                dj_fill = mFillZero(dj(:, :, i:i+segment-1), obj.strides);
             
                 % 将dj按照反卷积公式扩展零
                 [dh, dw, df] = size(dj_fill);
@@ -77,7 +79,7 @@ classdef BasicConv3dbyChannels < handle
                 dj_extend(fh:fh+dh-1, fw:fw+dw-1, ff:ff+df-1) = dj_fill;
                 
                 % 将卷积核反转
-                filter_reverse = mReverse3d(obj.filter(:, :, :, floor(i/18)+1));
+                filter_reverse = mReverse3d(obj.filter(:, :, :, floor(i/(segment*3))+1));
                 
                 % 反卷积得到结果，调用conv3
                 error_R = error_R + conv3(dj_extend, filter_reverse, [1, 1, 1], 'valid');
@@ -87,8 +89,8 @@ classdef BasicConv3dbyChannels < handle
             % ---- G ----
             % 根据卷积步长填充零
             error_G = zeros(ih, iw, in/3);
-            for i=7:18:tf
-                dj_fill = mFillZero(dj(:, :, i:i+5), obj.strides);
+            for i=(segment+1):(segment*3):tf
+                dj_fill = mFillZero(dj(:, :, i:i+segment-1), obj.strides);
             
                 % 将dj按照反卷积公式扩展零
                 [dh, dw, df] = size(dj_fill);
@@ -100,7 +102,7 @@ classdef BasicConv3dbyChannels < handle
                 dj_extend(fh:fh+dh-1, fw:fw+dw-1, ff:ff+df-1) = dj_fill;
                 
                 % 将卷积核反转
-                filter_reverse = mReverse3d(obj.filter(:, :, :, floor(i/18)+1));
+                filter_reverse = mReverse3d(obj.filter(:, :, :, floor(i/(segment*3))+1));
                 
                 % 反卷积得到结果，调用conv3
                 error_G = error_G + conv3(dj_extend, filter_reverse, [1, 1, 1], 'valid');
@@ -110,8 +112,8 @@ classdef BasicConv3dbyChannels < handle
             % ---- B ----
             % 根据卷积步长填充零
             error_B = zeros(ih, iw, in/3);
-            for i=13:18:tf
-                dj_fill = mFillZero(dj(:, :, i:i+5), obj.strides);
+            for i=(2*segment+1):(segment*3):tf
+                dj_fill = mFillZero(dj(:, :, i:i+segment-1), obj.strides);
             
                 % 将dj按照反卷积公式扩展零
                 [dh, dw, df] = size(dj_fill);
@@ -123,7 +125,7 @@ classdef BasicConv3dbyChannels < handle
                 dj_extend(fh:fh+dh-1, fw:fw+dw-1, ff:ff+df-1) = dj_fill;
                 
                 % 将卷积核反转
-                filter_reverse = mReverse3d(obj.filter(:, :, :, floor(i/18)+1));
+                filter_reverse = mReverse3d(obj.filter(:, :, :, floor(i/(segment*3))+1));
                 
                 % 反卷积得到结果，调用conv3
                 error_B = error_B + conv3(dj_extend, filter_reverse, [1, 1, 1], 'valid');

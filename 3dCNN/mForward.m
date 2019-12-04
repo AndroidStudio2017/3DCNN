@@ -14,7 +14,7 @@ function [ result ] = mForward( net, input)
         module = net.(key);
         
         % Debug
-        size(res_trans)
+        % size(res_trans)
         res_trans = module.forward(res_trans);
     end
     
