@@ -5,7 +5,8 @@ addpath(genpath('../3dCNN'))                % 加入库文件搜索路径
 addpath(genpath('../utils'))
 
 %% 读取视频数据
-videoRaw = VideoReader('../../video/Truthful/trial_truth_002.mp4');
+file_name = '../../video/Truthful/trial_truth_002.mp4';
+videoRaw = VideoReader(file_name);
 
 nFrames = 10;
 height = videoRaw.Height;
@@ -121,30 +122,7 @@ decept_len = length(decept_list);
 
 error_total = [];
 for epoch=1:10
-    
-%     % 读取视频数据
-%     fprintf('读取视频数据 ...\n');
-%     videoRaw = VideoReader([truth_folder, truth_list(1).name]);
-%     
-%     % nFrames = videoRaw.NumberOfFrames;
-%     nFrames = 10;
-%     height = videoRaw.Height;
-%     width = videoRaw.Width;
-%     
-%     % 构造网络输入
-%     fprintf('分离RGB通道 ...\n');
-%     img_R = zeros(height, width, nFrames); 
-%     img_G = zeros(height, width, nFrames); 
-%     img_B = zeros(height, width, nFrames);
-% 
-%     for i = 1:nFrames
-%         im = read(videoRaw, i);
-%         [R, G, B] = separateRGB(im);
-%         img_R(:, :, i) = R;
-%         img_G(:, :, i) = G;
-%         img_B(:, :, i) = B;
-%     end
-%     inputArray = uint8(cat(3, img_R, img_G, img_B));
+    fprintf(['\n视频数据: ', file_name, '\n\n']);
     
     % 前向传播
     fprintf('前向传播中 ...\n');
